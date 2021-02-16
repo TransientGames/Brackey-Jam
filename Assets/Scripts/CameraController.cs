@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-
-    [SerializeField] private GameObject _firstPersonCamera;
     [SerializeField] private GameObject _thirdPersonCamera;
     [SerializeField] private GameObject _thirdPersonCameraArm;
     private PlayerInputController _inputs;
@@ -13,8 +11,8 @@ public class CameraController : MonoBehaviour
     private float _cameraPitch;
     private float _thirdPersonCamRot;
     private float _thirdPersonCameraFollowMinDistance = 1f;
-    private float _thirdPersonCameraFollowMaxDistance = 3f;
-    private float _thirdPersonCameraFollowMaxMaxDistance = 3f;
+    private float _thirdPersonCameraFollowMaxDistance = 1f;
+    private float _thirdPersonCameraFollowMaxMaxDistance = 2f;
     private Vector3 _thirdPersonCameraDolly;
     private float _thirdPersonCameraDistance;
     private float _thirdPersonCameraSmooth = 5f;
@@ -75,42 +73,10 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            _firstPersonCamera.transform.localEulerAngles = Vector3.right * _cameraPitch;
+            //_firstPersonCamera.transform.localEulerAngles = Vector3.right * _cameraPitch;
             transform.Rotate(Vector3.up * rawAim.x * _mouseHorizontalSensitivity);
         }
     }
-
-    public void TogglePerspective()
-    {
-        if (_playerStates.isThirdPerson)
-        {
-            StartCoroutine(ThirdToFirstPersonZoom());
-        }
-        else
-        {
-            ResetThirdPersonCamera();
-            _thirdPersonCameraFollowMaxDistance = 3f;
-            _thirdPersonCamera.SetActive(true);
-            _firstPersonCamera.SetActive(false);
-            _playerStates.isThirdPerson = true;
-        }
-    }
-
-    IEnumerator ThirdToFirstPersonZoom()
-    {
-        float duration = 0.25f;
-        float timeElapsed = 0f;
-        while(timeElapsed < duration)
-        {
-            _thirdPersonCameraFollowMaxDistance = Mathf.Lerp(_thirdPersonCameraFollowMaxDistance, _thirdPersonCameraFollowMinDistance, timeElapsed / duration);
-            timeElapsed += Time.deltaTime;
-            yield return null;
-        }
-        _firstPersonCamera.SetActive(true);
-        _thirdPersonCamera.SetActive(false);
-        _playerStates.isThirdPerson = false;
-    }
-
 
     public void ThirPersonCamFollowDistance(float value)
     {

@@ -1,24 +1,25 @@
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class RigidBodyMovement : MonoBehaviour
 {
     [SerializeField] private GameObject _thirdPersonCameraArm;
     [SerializeField] private GameObject _groundCheck;
     [SerializeField] private LayerMask _groundMask;
-    [SerializeField] private float _fallingVelocity = 8f;
+    //[SerializeField] private float _fallingVelocity = 8f;
+    [SerializeField] private float _jumpForce = 10f;
     [SerializeField] private bool _canFly = false;
     [SerializeField] GameObject _model;
+    private Rigidbody _rigidBody;
     private PlayerAnimation _animator;
     private CharacterController _controller;
     private PlayerInputController _inputs;
     private CameraController _cameraController;
     private PlayerStates _playerStates;
-    private float gravity = -25f;
-    Vector3 direction;
-    Vector3 velocity;
-    Vector2 _rawInput;
-    Vector3 _defaultRotation = new Vector3(0, 0, 0);
-    Vector3 _flyRotation = new Vector3(-78f, 0, 0);
+    private Vector3 direction;
+    private Vector2 _rawInput;
+    private Vector3 _default = new Vector3(0, 0, 0);
+    private Vector3 _flyRotation = new Vector3(-70f, 0, 0);
+    private Vector3 _flyPosition = new Vector3(0, 0.6f, 0);
 
     private void Awake()
     {
@@ -27,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _cameraController = GetComponent<CameraController>();
         _playerStates = GetComponent<PlayerStates>();
+        _rigidBody = GetComponent<Rigidbody>();
     }
 
 
@@ -42,39 +44,36 @@ public class PlayerMovement : MonoBehaviour
         if (_playerStates.isGrounded)
         {
             _animator.ToggleFalling(false);
-            if (velocity.y < 0)
-            {
-                velocity.y = -2f;
-            }
+
             if (_canFly)
             {
                 _playerStates.isFlying = false;
                 _animator.ToggleFlying(false);
-                _model.transform.localEulerAngles = _defaultRotation;
+                _model.transform.localEulerAngles = _default;
+                _model.transform.localPosition = _default;
+                _rigidBody.useGravity = true;
             }
         }
         else
         {
-            if (_canFly)
+            _animator.ToggleFalling(true);
+
+            if (_playerStates.isFlying)
             {
-                _animator.ToggleFalling(true);
-            }
-            else if (velocity.y < -(_fallingVelocity))
-            {
-                _animator.ToggleFalling(true);
+                if (_playerStates.descend)
+                {
+                    transform.Translate(Vector3.down * _playerStates.currentSpeed * Time.deltaTime, Space.World);
+                }
+                else if (_playerStates.ascend)
+                {
+                    transform.Translate(Vector3.up * _playerStates.currentSpeed * Time.deltaTime, Space.World);
+                }
             }
         }
+
         _rawInput = _inputs.Movement();
-        direction = (transform.forward * _rawInput.y + transform.right * _rawInput.x) * _playerStates.currentSpeed;
-        print(direction);
-        _controller.Move(direction * Time.deltaTime);
-
-        if (_canFly && _playerStates.isFlying == false || !_canFly)
-        {
-            velocity.y += gravity * Time.deltaTime;
-        }
-
-        _controller.Move(velocity * Time.deltaTime);
+        direction = (transform.forward * _rawInput.y + transform.right * _rawInput.x) * _playerStates.currentSpeed * Time.deltaTime;
+        transform.Translate(direction, Space.World);
     }
 
     public void StartMoving()
@@ -97,13 +96,16 @@ public class PlayerMovement : MonoBehaviour
         if (_playerStates.isGrounded)
         {
             _animator.Jumped();
-            velocity.y = Mathf.Sqrt(_playerStates.jumpHeight * -2f * gravity);
+            _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, _jumpForce, _rigidBody.velocity.z);
         }
         else if (_canFly && _playerStates.isFlying == false)
         {
             _playerStates.isFlying = true;
             _animator.ToggleFlying(true);
+            _rigidBody.useGravity = false;
+            _rigidBody.velocity = new Vector3(0,0,0);
             _model.transform.localEulerAngles = _flyRotation;
+            _model.transform.localPosition = _flyPosition;
         }
     }
 }

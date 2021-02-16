@@ -20,9 +20,9 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Move"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""30fba7e2-9693-409a-ac22-ddd04ac91135"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
@@ -51,7 +51,7 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""TogglePerspective"",
+                    ""name"": ""ToggleCharacter"",
                     ""type"": ""Button"",
                     ""id"": ""49ff6459-a398-413e-82c7-595e5653cbca"",
                     ""expectedControlType"": ""Button"",
@@ -60,16 +60,24 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Scroll"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""c21079a7-d14d-4d6b-a825-5f0afcd3906c"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
                     ""name"": ""Aim"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""370f3161-fec3-4ba8-8c7b-a5177153fc6f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Descend"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e3cc587-5104-4871-9295-74ae7a7f5fac"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -77,15 +85,59 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""e9bdcd06-6077-4076-8bb5-3eec13731bc1"",
-                    ""path"": """",
+                    ""name"": ""2D Vector"",
+                    ""id"": ""1db9c9ec-c14c-4d56-9512-fe86249f0067"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""8c01dc00-46dc-40c0-aeda-0d4abad0f8c5"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""6fb1524e-89ee-4c5d-8456-fa5995b98e35"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""0ef6e514-30b8-46a1-89f2-2ceeb97d7f23"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""2a00d51d-6403-4131-9013-de40d056d32c"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -112,7 +164,7 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a91b6d69-b696-45cb-b3c6-604a5abff115"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -123,20 +175,20 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""67a98edd-9d50-4df5-a519-98c2aa0f8a96"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""TogglePerspective"",
+                    ""action"": ""ToggleCharacter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""ae49fedc-7b7b-43d5-b3d3-dac25d941010"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/scroll/y"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""Normalize(min=-1,max=1)"",
                     ""groups"": """",
                     ""action"": ""Scroll"",
                     ""isComposite"": false,
@@ -145,11 +197,22 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e34ffde1-f40b-4d90-82f8-41353b2abf23"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aea20a8b-14fa-4d24-8bd1-22948619804f"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Descend"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -164,9 +227,10 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
         m_Walk_Sprint = m_Walk.FindAction("Sprint", throwIfNotFound: true);
         m_Walk_Crouch = m_Walk.FindAction("Crouch", throwIfNotFound: true);
         m_Walk_Jump = m_Walk.FindAction("Jump", throwIfNotFound: true);
-        m_Walk_TogglePerspective = m_Walk.FindAction("TogglePerspective", throwIfNotFound: true);
+        m_Walk_ToggleCharacter = m_Walk.FindAction("ToggleCharacter", throwIfNotFound: true);
         m_Walk_Scroll = m_Walk.FindAction("Scroll", throwIfNotFound: true);
         m_Walk_Aim = m_Walk.FindAction("Aim", throwIfNotFound: true);
+        m_Walk_Descend = m_Walk.FindAction("Descend", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -220,9 +284,10 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
     private readonly InputAction m_Walk_Sprint;
     private readonly InputAction m_Walk_Crouch;
     private readonly InputAction m_Walk_Jump;
-    private readonly InputAction m_Walk_TogglePerspective;
+    private readonly InputAction m_Walk_ToggleCharacter;
     private readonly InputAction m_Walk_Scroll;
     private readonly InputAction m_Walk_Aim;
+    private readonly InputAction m_Walk_Descend;
     public struct WalkActions
     {
         private @ControlSchemes m_Wrapper;
@@ -231,9 +296,10 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Walk_Sprint;
         public InputAction @Crouch => m_Wrapper.m_Walk_Crouch;
         public InputAction @Jump => m_Wrapper.m_Walk_Jump;
-        public InputAction @TogglePerspective => m_Wrapper.m_Walk_TogglePerspective;
+        public InputAction @ToggleCharacter => m_Wrapper.m_Walk_ToggleCharacter;
         public InputAction @Scroll => m_Wrapper.m_Walk_Scroll;
         public InputAction @Aim => m_Wrapper.m_Walk_Aim;
+        public InputAction @Descend => m_Wrapper.m_Walk_Descend;
         public InputActionMap Get() { return m_Wrapper.m_Walk; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -255,15 +321,18 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
                 @Jump.started -= m_Wrapper.m_WalkActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_WalkActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_WalkActionsCallbackInterface.OnJump;
-                @TogglePerspective.started -= m_Wrapper.m_WalkActionsCallbackInterface.OnTogglePerspective;
-                @TogglePerspective.performed -= m_Wrapper.m_WalkActionsCallbackInterface.OnTogglePerspective;
-                @TogglePerspective.canceled -= m_Wrapper.m_WalkActionsCallbackInterface.OnTogglePerspective;
+                @ToggleCharacter.started -= m_Wrapper.m_WalkActionsCallbackInterface.OnToggleCharacter;
+                @ToggleCharacter.performed -= m_Wrapper.m_WalkActionsCallbackInterface.OnToggleCharacter;
+                @ToggleCharacter.canceled -= m_Wrapper.m_WalkActionsCallbackInterface.OnToggleCharacter;
                 @Scroll.started -= m_Wrapper.m_WalkActionsCallbackInterface.OnScroll;
                 @Scroll.performed -= m_Wrapper.m_WalkActionsCallbackInterface.OnScroll;
                 @Scroll.canceled -= m_Wrapper.m_WalkActionsCallbackInterface.OnScroll;
                 @Aim.started -= m_Wrapper.m_WalkActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_WalkActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_WalkActionsCallbackInterface.OnAim;
+                @Descend.started -= m_Wrapper.m_WalkActionsCallbackInterface.OnDescend;
+                @Descend.performed -= m_Wrapper.m_WalkActionsCallbackInterface.OnDescend;
+                @Descend.canceled -= m_Wrapper.m_WalkActionsCallbackInterface.OnDescend;
             }
             m_Wrapper.m_WalkActionsCallbackInterface = instance;
             if (instance != null)
@@ -280,15 +349,18 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @TogglePerspective.started += instance.OnTogglePerspective;
-                @TogglePerspective.performed += instance.OnTogglePerspective;
-                @TogglePerspective.canceled += instance.OnTogglePerspective;
+                @ToggleCharacter.started += instance.OnToggleCharacter;
+                @ToggleCharacter.performed += instance.OnToggleCharacter;
+                @ToggleCharacter.canceled += instance.OnToggleCharacter;
                 @Scroll.started += instance.OnScroll;
                 @Scroll.performed += instance.OnScroll;
                 @Scroll.canceled += instance.OnScroll;
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @Descend.started += instance.OnDescend;
+                @Descend.performed += instance.OnDescend;
+                @Descend.canceled += instance.OnDescend;
             }
         }
     }
@@ -299,8 +371,9 @@ public class @ControlSchemes : IInputActionCollection, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnTogglePerspective(InputAction.CallbackContext context);
+        void OnToggleCharacter(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnDescend(InputAction.CallbackContext context);
     }
 }

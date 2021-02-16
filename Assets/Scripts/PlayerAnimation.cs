@@ -24,19 +24,10 @@ public class PlayerAnimation : MonoBehaviour
     private void Animate()
     {
         _movement = _inputs.Movement();
-        if (_playerState.isSprinting)
-        {
-            _movement *= 2;
-        }
         _animator.SetFloat("Velocity Z", _movement.y);
         _animator.SetFloat("Velocity X", _movement.x);
     }
 
-    public void ToggleCrouch(bool state)
-    {
-        _animator.SetBool("isCrouching", state);
-    }
-    
     public void Jumped()
     {
         _animator.SetTrigger("Jumped");
@@ -45,5 +36,10 @@ public class PlayerAnimation : MonoBehaviour
     public void ToggleFalling(bool state)
     {
         _animator.SetBool("isFalling", state);
+    }
+
+    public void ToggleFlying(bool state)
+    {
+        _animator.SetBool("isFlying", state);
     }
 }
