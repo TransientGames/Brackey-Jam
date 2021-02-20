@@ -26,6 +26,16 @@ public class CameraController : MonoBehaviour
         _playerStates = GetComponent<PlayerStates>();
     }
 
+    private void OnEnable()
+    {
+        _playerStates.isActive = true;
+    }
+
+    private void OnDisable()
+    {
+        _playerStates.isActive = false;
+    }
+
     void Start()
     {
         _thirdPersonCameraDolly = _thirdPersonCamera.transform.localPosition.normalized;

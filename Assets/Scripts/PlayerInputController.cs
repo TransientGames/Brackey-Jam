@@ -58,17 +58,29 @@ public class PlayerInputController : MonoBehaviour
 
     private void ToggleCharacter()
     {
-        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        if (_rigidBodyMovement.canFly)
+        {
+            if (_playerStates.isFlying)
+            {
+                _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            }
+            else
+            {
+                _rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            }
+        }
+        else
+        {
+            _rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        }
+        otherCharacter.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
 
         otherCharacter.GetComponent<PlayerInputController>().enabled = true;
         otherCharacter.GetComponent<RigidBodyMovement>().enabled = true;
         otherCharacter.GetComponent<CameraController>().enabled = true;
-        //otherCharacter.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-        otherCharacter.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
         otherCamera.SetActive(true);
         
 
-        //_playerMovement.enabled = false;
         _rigidBodyMovement.enabled = false;
         _cameraController.enabled = false;
         myCamera.SetActive(false);

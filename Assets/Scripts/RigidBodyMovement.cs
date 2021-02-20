@@ -1,14 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RigidBodyMovement : MonoBehaviour
 {
     [SerializeField] private GameObject _thirdPersonCameraArm;
-    [SerializeField] private GameObject _groundCheck;
-    [SerializeField] private LayerMask _groundMask;
-    //[SerializeField] private float _fallingVelocity = 8f;
     [SerializeField] private float _jumpForce = 10f;
-    [SerializeField] private bool _canFly = false;
+    public bool canFly = false;
     [SerializeField] GameObject _model;
+    [SerializeField] private GameObject thruster1;
+    [SerializeField] private GameObject thruster2;
+    [SerializeField] private GameObject _icon;
     private Rigidbody _rigidBody;
     private PlayerAnimation _animator;
     private CharacterController _controller;
@@ -29,6 +31,7 @@ public class RigidBodyMovement : MonoBehaviour
         _cameraController = GetComponent<CameraController>();
         _playerStates = GetComponent<PlayerStates>();
         _rigidBody = GetComponent<Rigidbody>();
+        _playerStates.canFly = canFly;
     }
 
 
@@ -39,19 +42,20 @@ public class RigidBodyMovement : MonoBehaviour
 
     public void Move()
     {
-        _playerStates.isGrounded = Physics.CheckSphere(_groundCheck.transform.position, 0.4f, _groundMask);
         
         if (_playerStates.isGrounded)
         {
             _animator.ToggleFalling(false);
 
-            if (_canFly)
+            if (canFly)
             {
                 _playerStates.isFlying = false;
                 _animator.ToggleFlying(false);
                 _model.transform.localEulerAngles = _default;
                 _model.transform.localPosition = _default;
-                _rigidBody.useGravity = true;
+                _rigidBody.mass = 1f;
+                thruster1.SetActive(false);
+                thruster2.SetActive(false);
             }
         }
         else
@@ -98,14 +102,53 @@ public class RigidBodyMovement : MonoBehaviour
             _animator.Jumped();
             _rigidBody.velocity = new Vector3(_rigidBody.velocity.x, _jumpForce, _rigidBody.velocity.z);
         }
-        else if (_canFly && _playerStates.isFlying == false)
+        else if (canFly && _playerStates.isFlying == false)
         {
-            _playerStates.isFlying = true;
-            _animator.ToggleFlying(true);
-            _rigidBody.useGravity = false;
-            _rigidBody.velocity = new Vector3(0,0,0);
-            _model.transform.localEulerAngles = _flyRotation;
-            _model.transform.localPosition = _flyPosition;
+            Fly();
         }
+    }
+
+    private void Fly()
+    {
+        _playerStates.isFlying = true;
+        _animator.ToggleFlying(true);
+        _rigidBody.mass = 100f;
+        _rigidBody.velocity = new Vector3(0, 0, 0);
+        _model.transform.localEulerAngles = _flyRotation;
+        _model.transform.localPosition = _flyPosition;
+        thruster1.SetActive(true);
+        thruster2.SetActive(true);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (canFly && collision.transform.CompareTag("WaterBlock"))
+        {
+            TriggerIcon();
+        }
+        else if (canFly && _playerStates.isFlying == false && collision.transform.CompareTag("OpenWater"))
+        {
+            StartCoroutine(DoubleJump());
+            TriggerIcon();
+        }
+    }
+
+    private void TriggerIcon()
+    {
+        _icon.SetActive(true);
+        StartCoroutine(StopIcon());
+    }
+
+    IEnumerator DoubleJump()
+    {
+        Jump();
+        yield return new WaitForSeconds(0.2f);
+        Jump();
+    }
+
+    IEnumerator StopIcon()
+    {
+        yield return new WaitForSeconds(2f);
+        _icon.SetActive(false);
     }
 }
