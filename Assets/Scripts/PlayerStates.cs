@@ -20,7 +20,6 @@ public class PlayerStates : MonoBehaviour
     public float currentSpeed = 3f;
     public float walkSpeed = 3f;
     public float jumpHeight = 0.5f;
-    private bool _cursorLocked = true;
 
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private GameObject _groundCheck;
@@ -36,11 +35,6 @@ public class PlayerStates : MonoBehaviour
 
     private void Start()
     {
-        if (_cursorLocked)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
         currentSpeed = walkSpeed;
     }
 

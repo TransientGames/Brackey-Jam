@@ -9,9 +9,11 @@ public class PlayerInputController : MonoBehaviour
     private ControlSchemes _playerControls;
     private Rigidbody _rigidbody;
 
+    public UIManager _uiManager;
     public GameObject otherCharacter;
     public GameObject otherCamera;
     public GameObject myCamera;
+    public GameManager gameManager;
 
 
     private void Awake()
@@ -58,6 +60,7 @@ public class PlayerInputController : MonoBehaviour
 
     private void ToggleCharacter()
     {
+        _uiManager.UpdateTargetText("");
         if (_rigidBodyMovement.canFly)
         {
             if (_playerStates.isFlying)
@@ -76,6 +79,7 @@ public class PlayerInputController : MonoBehaviour
         otherCharacter.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
 
         otherCharacter.GetComponent<PlayerInputController>().enabled = true;
+        gameManager.playerControls = otherCharacter.GetComponent<PlayerInputController>();
         otherCharacter.GetComponent<RigidBodyMovement>().enabled = true;
         otherCharacter.GetComponent<CameraController>().enabled = true;
         otherCamera.SetActive(true);

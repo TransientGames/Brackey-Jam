@@ -34,6 +34,13 @@ public class RigidBodyMovement : MonoBehaviour
         _playerStates.canFly = canFly;
     }
 
+    private void Start()
+    {
+        if (_playerStates.canFly)
+        {
+            Fly();
+        }
+    }
 
     private void Update()
     {

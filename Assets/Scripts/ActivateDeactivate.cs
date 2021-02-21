@@ -8,15 +8,39 @@ public class ActivateDeactivate : MonoBehaviour
     private enum type {Activate, Deactivate, Toggle};
     [SerializeField] private type _type;
 
-    private bool _activatable = false;
     private bool _complete = false;
+    private List<PlayerStates> _charactersInside = new List<PlayerStates>();
+    private string _action;
+    private bool playerActive = false;
 
+    private void Start()
+    {
+        if (_type == type.Deactivate)
+        {
+            _action = "Deactivate";
+        }
+        else
+        {
+            _action = "Activate";
+        }
+    }
 
     private void Update()
     {
-        if (_activatable)
+        playerActive = false;
+        foreach (PlayerStates character in _charactersInside)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (playerActive == false && character.isActive)
+            {
+                playerActive = true;
+            }
+        }
+
+        if (_charactersInside.Count > 0 && playerActive && _complete == false)
+        {            
+            uiManager.UpdateTargetText("Press E to " + _action);
+
+            if (Input.GetKeyDown(KeyCode.E) && _complete == false)
             {
                 if (_type == type.Activate)
                 {
@@ -42,9 +66,10 @@ public class ActivateDeactivate : MonoBehaviour
                     foreach (GameObject actor in _actors)
                     {
                         actor.SetActive(!actor.activeSelf);
+                        FindObjectOfType<AudioManager>().Play("Shutdown");
                     }
                 }
-            }
+            }            
         }
     }
 
@@ -52,18 +77,7 @@ public class ActivateDeactivate : MonoBehaviour
     {
         if (other.CompareTag("Player") && _complete == false)
         {
-            _activatable = true;
-            string action;
-            if (_type == type.Deactivate)
-            {
-                action = "Deactivate";
-            }
-            else
-            {
-                action = "Activate";
-            }
-
-            uiManager.UpdateTargetText("Press E to " + action);
+            _charactersInside.Add(other.GetComponent<PlayerStates>());
         }
     }
 
@@ -71,7 +85,7 @@ public class ActivateDeactivate : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            _activatable = false;
+            _charactersInside.Remove(other.GetComponent<PlayerStates>());
             uiManager.UpdateTargetText("");
         }
     }
